@@ -14,6 +14,7 @@
 (?i:END)                        {printf("End Token \n");};
 (?i:START)                      {printf("Start Token \n");};
 (?i:PRINT)                      {printf("Print Token \n");};
+(?i:INPUT)                      {printf("Input Token \n");};
 (?i:EQUALS\-TO)                 {printf("Equals-to Token \n");};
 (?i:EQUALS\-TO\-VALUE)          {printf("Equals-to-value Token \n");};
 [0-9]+                          {printf("Numeric Int Token\n");};

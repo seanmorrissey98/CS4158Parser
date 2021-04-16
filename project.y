@@ -34,6 +34,12 @@ variables:			definition variables {}
 definition:			variable IDENTIFIER SEMICOLON {}
 variable:			INT_VARIABLE | DOUBLE_VARIABLE {}
 main:				MAIN SEMICOLON statements {}
+statements:			keyword statements {}
+					| finish {}
+keyword:			print {}
+					| add {}
+					| input {}
+					| check_equals {}
 input:				INPUT readin SEMICOLON {}
 readin:				IDENTIFIER COMMA readin {}
 					| IDENTIFIER {}
@@ -41,7 +47,11 @@ add:				ADD type TO IDENTIFIER SEMICOLON {}
 type:				IDENTIFIER {}
 					| NUMERIC_INT {}
 					| NUMERIC_DOUBLE {}
-print:				
+print:				PRINT combination SEMICOLON {}
+combination:		IDENTIFIER {}
+					| IDENTIFIER COMMA {}
+					| STRING {}
+					| STRING COMMA {}
 check_equals:		IDENTIFIER EQUALS_TO IDENTIFIER SEMICOLON {}
 					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_INT SEMICOLON {}
 					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_DOUBLE SEMICOLON {}

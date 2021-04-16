@@ -16,53 +16,36 @@ void yyerror(const char* s);
 	float fval;
 }
 
-%token<ival> T_INT
-%token<fval> T_FLOAT
-%token T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_LEFT T_RIGHT
-%token T_NEWLINE T_QUIT
-%left T_PLUS T_MINUS
-%left T_MULTIPLY T_DIVIDE
+%token<ival> NUMERIC_INT
+%token<fval> NUMERIC_DOUBLE
+%token<id> IDENTIFIER
+%token<id> INT_VARIABLE
+%token<id> DOUBLE_VARIABLE
+%token ADD TO MAIN END START PRINT INPUT EQUALS_TO EQUALS_TO_VALUE 
+%token STRING SEMICOLON COMMA INVALID
 
-%type<ival> expression
-%type<fval> mixed_expression
-
-%start calculation
+%start start_program
 
 %%
 
-calculation:
-	   | calculation line
-;
-
-line: T_NEWLINE
-    | mixed_expression T_NEWLINE { printf("\tResult: %f\n", $1);}
-    | expression T_NEWLINE { printf("\tResult: %i\n", $1); }
-    | T_QUIT T_NEWLINE { printf("bye!\n"); exit(0); }
-;
-
-mixed_expression: T_FLOAT                 		 { $$ = $1; }
-	  | mixed_expression T_PLUS mixed_expression	 { $$ = $1 + $3; }
-	  | mixed_expression T_MINUS mixed_expression	 { $$ = $1 - $3; }
-	  | mixed_expression T_MULTIPLY mixed_expression { $$ = $1 * $3; }
-	  | mixed_expression T_DIVIDE mixed_expression	 { $$ = $1 / $3; }
-	  | T_LEFT mixed_expression T_RIGHT		 { $$ = $2; }
-	  | expression T_PLUS mixed_expression	 	 { $$ = $1 + $3; }
-	  | expression T_MINUS mixed_expression	 	 { $$ = $1 - $3; }
-	  | expression T_MULTIPLY mixed_expression 	 { $$ = $1 * $3; }
-	  | expression T_DIVIDE mixed_expression	 { $$ = $1 / $3; }
-	  | mixed_expression T_PLUS expression	 	 { $$ = $1 + $3; }
-	  | mixed_expression T_MINUS expression	 	 { $$ = $1 - $3; }
-	  | mixed_expression T_MULTIPLY expression 	 { $$ = $1 * $3; }
-	  | mixed_expression T_DIVIDE expression	 { $$ = $1 / $3; }
-	  | expression T_DIVIDE expression		 { $$ = $1 / (float)$3; }
-;
-
-expression: T_INT				{ $$ = $1; }
-	  | expression T_PLUS expression	{ $$ = $1 + $3; }
-	  | expression T_MINUS expression	{ $$ = $1 - $3; }
-	  | expression T_MULTIPLY expression	{ $$ = $1 * $3; }
-	  | T_LEFT expression T_RIGHT		{ $$ = $2; }
-;
+start_program:		START SEMICOLON variables {}
+variables:			definition variables {}
+					| main {}
+definition:			variable IDENTIFIER SEMICOLON {}
+variable:			INT_VARIABLE | DOUBLE_VARIABLE {}
+main:				MAIN SEMICOLON statements {}
+input:				INPUT readin SEMICOLON {}
+readin:				IDENTIFIER COMMA readin {}
+					| IDENTIFIER {}
+add:				ADD type TO IDENTIFIER SEMICOLON {}
+type:				IDENTIFIER {}
+					| NUMERIC_INT {}
+					| NUMERIC_DOUBLE {}
+print:				
+check_equals:		IDENTIFIER EQUALS_TO IDENTIFIER SEMICOLON {}
+					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_INT SEMICOLON {}
+					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_DOUBLE SEMICOLON {}
+finish:				END SEMICOLON {exit(0);}
 
 %%
 

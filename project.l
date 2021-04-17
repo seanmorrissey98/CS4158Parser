@@ -2,10 +2,13 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    #include "y.tab.h"
+    #include "project.tab.h"
 %}
 
 /* Token Specification */
+%option yylineno
+%option noyywrap
+
 %%
 [\t\n ]+                                                ;
 [xX]+                                                   {yylval.id = yytext; return INT_VARIABLE;};
@@ -27,10 +30,3 @@
 \,                                                      {return COMMA;};
 .|[0-9][a-zA-Z0-9]+|[a-zA-Z0-9]+[0-9]|\-[a-zA-Z0-9]+    {return INVALID;};
 %%
-
-int main() {
-    yylex();
-}
-int yywrap() { 
-    return 1;
-}

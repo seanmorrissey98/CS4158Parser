@@ -11,8 +11,8 @@
 
 %%
 [\t\n ]+                                                ;
-[xX]+                                                   {yylval.id = yytext; return INT_VARIABLE;};
-[xX]+[\-][xX]+                                          {yylval.id = yytext; return DOUBLE_VARIABLE;};
+[xX]+                                                   {yylval.id = strdup(yytext); return INT_VARIABLE;};
+[xX]+[\-][xX]+                                          {yylval.id = strdup(yytext); return DOUBLE_VARIABLE;};
 (?i:ADD)                                                {return ADD;};
 (?i:TO)                                                 {return TO;};
 (?i:MAIN)                                               {return MAIN;};
@@ -24,7 +24,7 @@
 (?i:EQUALS\-TO\-VALUE)                                  {return EQUALS_TO_VALUE;};
 [0-9]+                                                  {yylval.ival = atoi(yytext); return NUMERIC_INT;};
 [0-9]+\.[0-9]+|\.[0-9]+                                 {yylval.fval = atof(yytext); return NUMERIC_DOUBLE;};
-[a-zA-Z][a-zA-Z0-9]{0,4}[a-zA-Z]|[a-wy-zA-WY-Z]         {yylval.id = yytext; return IDENTIFIER;};
+[a-zA-Z][a-zA-Z0-9]{0,4}[a-zA-Z]|[a-wy-zA-WY-Z]         {yylval.id = strdup(yytext); return IDENTIFIER;};
 \"([^"\\])*\"                                           {return STRING;};
 \;                                                      {return SEMICOLON;};
 \,                                                      {return COMMA;};

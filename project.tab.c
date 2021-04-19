@@ -1705,7 +1705,7 @@ bool isDefined(char *name, bool check) {
 
 void defineVariable(char *size, char *name) {
 	printf("SIZE: %s\n", size);
-	printf("NAME: %s\n", size);
+	printf("NAME: %s\n", name);
 	if(isDefined(name, false) == true) {
 		printf("Already defined");
 	}

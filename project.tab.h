@@ -71,13 +71,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "project.y" /* yacc.c:1909  */
+#line 32 "project.y" /* yacc.c:1909  */
 
 	char *id;
 	int ival;
-	float fval;
 
-#line 81 "project.tab.h" /* yacc.c:1909  */
+#line 80 "project.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

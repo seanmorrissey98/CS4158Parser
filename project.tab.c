@@ -69,6 +69,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 #define MAX_VARIABLES 100
 
 extern int yylex();
@@ -76,7 +77,7 @@ extern int yyparse();
 extern int yylineno;
 extern FILE* yyin;
 
-char names[MAX_VARIABLES][7];
+char names[MAX_VARIABLES][9];
 int sizes[MAX_VARIABLES][2];
 int variableTotal = 0;
 
@@ -86,8 +87,13 @@ bool isDefined(char *name, bool check);
 void getSize(char *size);
 void defineInt(char *size);
 void defineDouble(char *size);
+void checkEqualsInt(char *identifier, int literal);
+void checkEqualsIdentifier(char *identifier1, char* identifier2);
+void checkEqualsDouble(char *identifier, char *literal);
+int getIndex(char *identifier);
+void getLiteralFloatSize(int *intSize, int *floatSize, char *literal);
 
-#line 91 "project.tab.c" /* yacc.c:339  */
+#line 97 "project.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -148,13 +154,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "project.y" /* yacc.c:355  */
+#line 32 "project.y" /* yacc.c:355  */
 
 	char *id;
 	int ival;
-	float fval;
 
-#line 158 "project.tab.c" /* yacc.c:355  */
+#line 163 "project.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -171,7 +176,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 175 "project.tab.c" /* yacc.c:358  */
+#line 180 "project.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -470,9 +475,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    44,    44,    45,    46,    47,    48,    49,    50,    51,
-      52,    53,    54,    55,    56,    57,    58,    59,    60,    61,
-      62,    63,    64,    65,    66,    67,    68,    69,    70,    71
+       0,    49,    49,    50,    51,    52,    53,    54,    55,    56,
+      57,    58,    59,    60,    61,    62,    63,    64,    65,    66,
+      67,    68,    69,    70,    71,    72,    73,    74,    75,    76
 };
 #endif
 
@@ -1276,175 +1281,175 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 44 "project.y" /* yacc.c:1646  */
+#line 49 "project.y" /* yacc.c:1646  */
     {}
-#line 1282 "project.tab.c" /* yacc.c:1646  */
+#line 1287 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 45 "project.y" /* yacc.c:1646  */
+#line 50 "project.y" /* yacc.c:1646  */
     {}
-#line 1288 "project.tab.c" /* yacc.c:1646  */
+#line 1293 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 46 "project.y" /* yacc.c:1646  */
+#line 51 "project.y" /* yacc.c:1646  */
     {}
-#line 1294 "project.tab.c" /* yacc.c:1646  */
+#line 1299 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 47 "project.y" /* yacc.c:1646  */
+#line 52 "project.y" /* yacc.c:1646  */
     {defineVariable((yyvsp[-2].id), (yyvsp[-1].id));}
-#line 1300 "project.tab.c" /* yacc.c:1646  */
+#line 1305 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 48 "project.y" /* yacc.c:1646  */
+#line 53 "project.y" /* yacc.c:1646  */
     {defineVariable((yyvsp[-2].id), (yyvsp[-1].id));}
-#line 1306 "project.tab.c" /* yacc.c:1646  */
+#line 1311 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 49 "project.y" /* yacc.c:1646  */
+#line 54 "project.y" /* yacc.c:1646  */
     {}
-#line 1312 "project.tab.c" /* yacc.c:1646  */
+#line 1317 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 50 "project.y" /* yacc.c:1646  */
+#line 55 "project.y" /* yacc.c:1646  */
     {}
-#line 1318 "project.tab.c" /* yacc.c:1646  */
+#line 1323 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 51 "project.y" /* yacc.c:1646  */
+#line 56 "project.y" /* yacc.c:1646  */
     {}
-#line 1324 "project.tab.c" /* yacc.c:1646  */
+#line 1329 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 52 "project.y" /* yacc.c:1646  */
+#line 57 "project.y" /* yacc.c:1646  */
     {}
-#line 1330 "project.tab.c" /* yacc.c:1646  */
+#line 1335 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 53 "project.y" /* yacc.c:1646  */
+#line 58 "project.y" /* yacc.c:1646  */
     {}
-#line 1336 "project.tab.c" /* yacc.c:1646  */
+#line 1341 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 54 "project.y" /* yacc.c:1646  */
+#line 59 "project.y" /* yacc.c:1646  */
     {}
-#line 1342 "project.tab.c" /* yacc.c:1646  */
+#line 1347 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 55 "project.y" /* yacc.c:1646  */
+#line 60 "project.y" /* yacc.c:1646  */
     {}
-#line 1348 "project.tab.c" /* yacc.c:1646  */
+#line 1353 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 56 "project.y" /* yacc.c:1646  */
+#line 61 "project.y" /* yacc.c:1646  */
     {}
-#line 1354 "project.tab.c" /* yacc.c:1646  */
+#line 1359 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 57 "project.y" /* yacc.c:1646  */
-    {}
-#line 1360 "project.tab.c" /* yacc.c:1646  */
+#line 62 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[-2].id), true);}
+#line 1365 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 58 "project.y" /* yacc.c:1646  */
-    {}
-#line 1366 "project.tab.c" /* yacc.c:1646  */
+#line 63 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[0].id), true);}
+#line 1371 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 59 "project.y" /* yacc.c:1646  */
-    {}
-#line 1372 "project.tab.c" /* yacc.c:1646  */
+#line 64 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[-1].id), true);}
+#line 1377 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 60 "project.y" /* yacc.c:1646  */
-    {}
-#line 1378 "project.tab.c" /* yacc.c:1646  */
+#line 65 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[0].id), true);}
+#line 1383 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 61 "project.y" /* yacc.c:1646  */
+#line 66 "project.y" /* yacc.c:1646  */
     {}
-#line 1384 "project.tab.c" /* yacc.c:1646  */
+#line 1389 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 62 "project.y" /* yacc.c:1646  */
+#line 67 "project.y" /* yacc.c:1646  */
     {}
-#line 1390 "project.tab.c" /* yacc.c:1646  */
+#line 1395 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 63 "project.y" /* yacc.c:1646  */
+#line 68 "project.y" /* yacc.c:1646  */
     {}
-#line 1396 "project.tab.c" /* yacc.c:1646  */
+#line 1401 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 64 "project.y" /* yacc.c:1646  */
+#line 69 "project.y" /* yacc.c:1646  */
     {isDefined((yyvsp[0].id), true);}
-#line 1402 "project.tab.c" /* yacc.c:1646  */
+#line 1407 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 65 "project.y" /* yacc.c:1646  */
+#line 70 "project.y" /* yacc.c:1646  */
     {isDefined((yyvsp[-2].id), true);}
-#line 1408 "project.tab.c" /* yacc.c:1646  */
+#line 1413 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 66 "project.y" /* yacc.c:1646  */
+#line 71 "project.y" /* yacc.c:1646  */
     {}
-#line 1414 "project.tab.c" /* yacc.c:1646  */
+#line 1419 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 67 "project.y" /* yacc.c:1646  */
+#line 72 "project.y" /* yacc.c:1646  */
     {}
-#line 1420 "project.tab.c" /* yacc.c:1646  */
+#line 1425 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 68 "project.y" /* yacc.c:1646  */
-    {}
-#line 1426 "project.tab.c" /* yacc.c:1646  */
+#line 73 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[-3].id), true); isDefined((yyvsp[-1].id), true); checkEqualsIdentifier((yyvsp[-3].id), (yyvsp[-1].id));}
+#line 1431 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 69 "project.y" /* yacc.c:1646  */
-    {}
-#line 1432 "project.tab.c" /* yacc.c:1646  */
+#line 74 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[-3].id), true); checkEqualsInt((yyvsp[-3].id), (yyvsp[-1].ival));}
+#line 1437 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 70 "project.y" /* yacc.c:1646  */
-    {}
-#line 1438 "project.tab.c" /* yacc.c:1646  */
+#line 75 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[-3].id), true); checkEqualsDouble((yyvsp[-3].id), (yyvsp[-1].id));}
+#line 1443 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 71 "project.y" /* yacc.c:1646  */
+#line 76 "project.y" /* yacc.c:1646  */
     {exit(0);}
-#line 1444 "project.tab.c" /* yacc.c:1646  */
+#line 1449 "project.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1448 "project.tab.c" /* yacc.c:1646  */
+#line 1453 "project.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1672,7 +1677,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 73 "project.y" /* yacc.c:1906  */
+#line 78 "project.y" /* yacc.c:1906  */
 
 
 int main() {
@@ -1698,16 +1703,14 @@ bool isDefined(char *name, bool check) {
 		}
 	}
 	if(defined == false && check == true) {
-		printf("%s is not defined\n", name);
+		printf("%s is not declared\n", name);
 	}
 	return defined;
 }
 
 void defineVariable(char *size, char *name) {
-	printf("SIZE: %s\n", size);
-	printf("NAME: %s\n", name);
 	if(isDefined(name, false) == true) {
-		printf("Already defined");
+		printf("Already declared");
 	}
 	strcpy(names[variableTotal], name);
 	getSize(size);
@@ -1728,7 +1731,6 @@ void defineInt(char *size) {
 		length++;
 		++size;
 	}
-	printf("length: %d\n", length);
 	sizes[variableTotal][0] = length;
 	sizes[variableTotal][1] = 0;
 }
@@ -1736,17 +1738,91 @@ void defineInt(char *size) {
 void defineDouble(char *size) {
 	int integerLength = 0;
 	int decimalLength = 0;
-	int totalLength = 0;
 	int index = 0;
-	while(size != NULL && *size != '\0') {
-		totalLength++;
-		++size;
-	}
-	char *location;
-	location = strchr(size, '-');
-	index = atoi(location);
-	integerLength = index - 1;
-	decimalLength = totalLength - index;
+	int length = (int)strlen(size);
+    for (int i = 0; i < length; i++) 
+    {
+       if(size[i]=='-') {
+		   index = i;
+		   break;
+	   }
+    }
+	integerLength = index;
+	decimalLength = length - index - 1;
 	sizes[variableTotal][0] = integerLength;
 	sizes[variableTotal][1] = decimalLength;
+}
+
+void checkEqualsInt(char *identifier, int literal) {
+	int inetegerSize1, doubleSize1, index1, literalSize;
+	inetegerSize1 = 0;
+	doubleSize1 = index1 = literalSize = inetegerSize1;
+	
+	literalSize = floor(log10(abs(literal))) + 1;
+	index1 = getIndex(identifier);
+	
+	inetegerSize1 = sizes[index1][0];
+	doubleSize1 = sizes[index1][1];
+	
+	if(inetegerSize1 != literalSize || doubleSize1 != 0) {
+		printf("%s is not the same size as %d\n", identifier, literal);
+	}
+}
+
+void checkEqualsIdentifier(char *identifier1, char* identifier2) {
+	int inetegerSize1, inetegerSize2, doubleSize1, doubleSize2, index1, index2;
+	inetegerSize1 = 0;
+	index1, index2, inetegerSize2 = doubleSize1 = doubleSize2 = inetegerSize1;
+	
+	index1 = getIndex(identifier1);
+	index2 = getIndex(identifier2);
+	
+	inetegerSize1 = sizes[index1][0];
+	doubleSize1 = sizes[index1][1];
+	inetegerSize2 = sizes[index2][0];
+	doubleSize2 = sizes[index2][1];
+	
+	if(inetegerSize1 != inetegerSize2 || doubleSize1 != doubleSize2) {
+		printf("%s is not the same size as %s\n", identifier1, identifier2);
+	}
+}
+
+void checkEqualsDouble(char *identifier, char *literal) {
+	int inetegerSize1, doubleSize1, index1, literalSize1, literalSize2;
+	inetegerSize1 = 0;
+	doubleSize1 = index1 = literalSize1 = literalSize2 = inetegerSize1;
+	
+	index1 = getIndex(identifier);
+	getLiteralFloatSize(&literalSize1, &literalSize2, literal);
+
+	inetegerSize1 = sizes[index1][0];
+	doubleSize1 = sizes[index1][1];
+
+	if(inetegerSize1 != literalSize1 || doubleSize1 != literalSize2) {
+		printf("%s is not the same size as %s\n", identifier, literal);
+	}
+}
+
+int getIndex(char *identifier) {
+	int index1 = 0;
+	for(int i = 0; i < variableTotal; i++) {
+		if(strcmp(names[i], identifier) == 0) {
+			index1 = i;
+		}
+	}
+	return index1;
+}
+
+void getLiteralFloatSize(int *intSize, int *floatSize, char *literal) {
+	int length = (int)strlen(literal);
+	int index = 0;
+    for (int i = 0; i < length; i++) 
+    {
+       if(literal[i]=='.') {
+		   index = i;
+		   break;
+	   }
+    }
+	*intSize = index;
+	*floatSize = length - index - 1;
 }

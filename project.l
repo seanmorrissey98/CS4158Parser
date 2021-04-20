@@ -23,7 +23,7 @@
 (?i:EQUALS\-TO)                                         {return EQUALS_TO;};
 (?i:EQUALS\-TO\-VALUE)                                  {return EQUALS_TO_VALUE;};
 [0-9]+                                                  {yylval.ival = atoi(yytext); return NUMERIC_INT;};
-[0-9]+\.[0-9]+|\.[0-9]+                                 {yylval.fval = atof(yytext); return NUMERIC_DOUBLE;};
+[0-9]+\.[0-9]+|\.[0-9]+                                 {yylval.id = strdup(yytext); return NUMERIC_DOUBLE;};
 [a-zA-Z][a-zA-Z0-9]{0,4}[a-zA-Z]|[a-wy-zA-WY-Z]         {yylval.id = strdup(yytext); return IDENTIFIER;};
 \"([^"\\])*\"                                           {return STRING;};
 \;                                                      {return SEMICOLON;};

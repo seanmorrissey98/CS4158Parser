@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 #define MAX_VARIABLES 100
 
 extern int yylex();
@@ -11,7 +12,7 @@ extern int yyparse();
 extern int yylineno;
 extern FILE* yyin;
 
-char names[MAX_VARIABLES][7];
+char names[MAX_VARIABLES][9];
 int sizes[MAX_VARIABLES][2];
 int variableTotal = 0;
 
@@ -21,16 +22,20 @@ bool isDefined(char *name, bool check);
 void getSize(char *size);
 void defineInt(char *size);
 void defineDouble(char *size);
+void checkEqualsInt(char *identifier, int literal);
+void checkEqualsIdentifier(char *identifier1, char* identifier2);
+void checkEqualsDouble(char *identifier, char *literal);
+int getIndex(char *identifier);
+void getLiteralFloatSize(int *intSize, int *floatSize, char *literal);
 %}
 
 %union {
 	char *id;
 	int ival;
-	float fval;
 }
 
 %token<ival> NUMERIC_INT
-%token<fval> NUMERIC_DOUBLE
+%token<id> NUMERIC_DOUBLE
 %token<id> IDENTIFIER
 %token<id> INT_VARIABLE
 %token<id> DOUBLE_VARIABLE
@@ -54,10 +59,10 @@ keyword:			print {}
 					| input {}
 					| check_equals {}
 input:				INPUT readin SEMICOLON {}
-readin:				IDENTIFIER COMMA readin {}
-					| IDENTIFIER {}
-add:				ADD type TO IDENTIFIER SEMICOLON {}
-type:				IDENTIFIER {}
+readin:				IDENTIFIER COMMA readin {isDefined($1, true);}
+					| IDENTIFIER {isDefined($1, true);}
+add:				ADD type TO IDENTIFIER SEMICOLON {isDefined($4, true);}
+type:				IDENTIFIER {isDefined($1, true);}
 					| NUMERIC_INT {}
 					| NUMERIC_DOUBLE {}
 print:				PRINT combination SEMICOLON {}
@@ -65,9 +70,9 @@ combination:		IDENTIFIER {isDefined($1, true);}
 					| IDENTIFIER COMMA combination {isDefined($1, true);}
 					| STRING {}
 					| STRING COMMA combination {}
-check_equals:		IDENTIFIER EQUALS_TO IDENTIFIER SEMICOLON {}
-					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_INT SEMICOLON {}
-					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_DOUBLE SEMICOLON {}
+check_equals:		IDENTIFIER EQUALS_TO IDENTIFIER SEMICOLON {isDefined($1, true); isDefined($3, true); checkEqualsIdentifier($1, $3);}
+					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_INT SEMICOLON {isDefined($1, true); checkEqualsInt($1, $3);}
+					| IDENTIFIER EQUALS_TO_VALUE NUMERIC_DOUBLE SEMICOLON {isDefined($1, true); checkEqualsDouble($1, $3);}
 finish:				END SEMICOLON {exit(0);}
 
 %%
@@ -95,14 +100,14 @@ bool isDefined(char *name, bool check) {
 		}
 	}
 	if(defined == false && check == true) {
-		printf("%s is not defined\n", name);
+		printf("%s is not declared\n", name);
 	}
 	return defined;
 }
 
 void defineVariable(char *size, char *name) {
 	if(isDefined(name, false) == true) {
-		printf("Already defined");
+		printf("Already declared");
 	}
 	strcpy(names[variableTotal], name);
 	getSize(size);
@@ -123,7 +128,6 @@ void defineInt(char *size) {
 		length++;
 		++size;
 	}
-	printf("length: %d\n", length);
 	sizes[variableTotal][0] = length;
 	sizes[variableTotal][1] = 0;
 }
@@ -131,17 +135,91 @@ void defineInt(char *size) {
 void defineDouble(char *size) {
 	int integerLength = 0;
 	int decimalLength = 0;
-	int totalLength = 0;
 	int index = 0;
-	while(size != NULL && *size != '\0') {
-		totalLength++;
-		++size;
-	}
-	char *location;
-	location = strchr(size, '-');
-	index = atoi(location);
-	integerLength = index - 1;
-	decimalLength = totalLength - index;
+	int length = (int)strlen(size);
+    for (int i = 0; i < length; i++) 
+    {
+       if(size[i]=='-') {
+		   index = i;
+		   break;
+	   }
+    }
+	integerLength = index;
+	decimalLength = length - index - 1;
 	sizes[variableTotal][0] = integerLength;
 	sizes[variableTotal][1] = decimalLength;
+}
+
+void checkEqualsInt(char *identifier, int literal) {
+	int inetegerSize1, doubleSize1, index1, literalSize;
+	inetegerSize1 = 0;
+	doubleSize1 = index1 = literalSize = inetegerSize1;
+	
+	literalSize = floor(log10(abs(literal))) + 1;
+	index1 = getIndex(identifier);
+	
+	inetegerSize1 = sizes[index1][0];
+	doubleSize1 = sizes[index1][1];
+	
+	if(inetegerSize1 != literalSize || doubleSize1 != 0) {
+		printf("%s is not the same size as %d\n", identifier, literal);
+	}
+}
+
+void checkEqualsIdentifier(char *identifier1, char* identifier2) {
+	int inetegerSize1, inetegerSize2, doubleSize1, doubleSize2, index1, index2;
+	inetegerSize1 = 0;
+	index1, index2, inetegerSize2 = doubleSize1 = doubleSize2 = inetegerSize1;
+	
+	index1 = getIndex(identifier1);
+	index2 = getIndex(identifier2);
+	
+	inetegerSize1 = sizes[index1][0];
+	doubleSize1 = sizes[index1][1];
+	inetegerSize2 = sizes[index2][0];
+	doubleSize2 = sizes[index2][1];
+	
+	if(inetegerSize1 != inetegerSize2 || doubleSize1 != doubleSize2) {
+		printf("%s is not the same size as %s\n", identifier1, identifier2);
+	}
+}
+
+void checkEqualsDouble(char *identifier, char *literal) {
+	int inetegerSize1, doubleSize1, index1, literalSize1, literalSize2;
+	inetegerSize1 = 0;
+	doubleSize1 = index1 = literalSize1 = literalSize2 = inetegerSize1;
+	
+	index1 = getIndex(identifier);
+	getLiteralFloatSize(&literalSize1, &literalSize2, literal);
+
+	inetegerSize1 = sizes[index1][0];
+	doubleSize1 = sizes[index1][1];
+
+	if(inetegerSize1 != literalSize1 || doubleSize1 != literalSize2) {
+		printf("%s is not the same size as %s\n", identifier, literal);
+	}
+}
+
+int getIndex(char *identifier) {
+	int index1 = 0;
+	for(int i = 0; i < variableTotal; i++) {
+		if(strcmp(names[i], identifier) == 0) {
+			index1 = i;
+		}
+	}
+	return index1;
+}
+
+void getLiteralFloatSize(int *intSize, int *floatSize, char *literal) {
+	int length = (int)strlen(literal);
+	int index = 0;
+    for (int i = 0; i < length; i++) 
+    {
+       if(literal[i]=='.') {
+		   index = i;
+		   break;
+	   }
+    }
+	*intSize = index;
+	*floatSize = length - index - 1;
 }

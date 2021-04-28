@@ -77,7 +77,8 @@ extern int yyparse();
 extern int yylineno;
 extern FILE* yyin;
 
-char names[MAX_VARIABLES][9];
+// 8 in length to take care of '\0'
+char names[MAX_VARIABLES][8];
 int sizes[MAX_VARIABLES][2];
 int variableTotal = 0;
 
@@ -93,7 +94,7 @@ void checkEqualsDouble(char *identifier, char *literal);
 int getIndex(char *identifier);
 void getLiteralFloatSize(int *intSize, int *floatSize, char *literal);
 
-#line 97 "project.tab.c" /* yacc.c:339  */
+#line 98 "project.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -154,12 +155,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 32 "project.y" /* yacc.c:355  */
+#line 33 "project.y" /* yacc.c:355  */
 
 	char *id;
 	int ival;
 
-#line 163 "project.tab.c" /* yacc.c:355  */
+#line 164 "project.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -176,7 +177,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 180 "project.tab.c" /* yacc.c:358  */
+#line 181 "project.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -418,16 +419,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   51
+#define YYLAST   59
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  21
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  15
+#define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  29
+#define YYNRULES  28
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  59
+#define YYNSTATES  64
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -475,9 +476,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    49,    49,    50,    51,    52,    53,    54,    55,    56,
-      57,    58,    59,    60,    61,    62,    63,    64,    65,    66,
-      67,    68,    69,    70,    71,    72,    73,    74,    75,    76
+       0,    50,    50,    51,    52,    53,    54,    55,    56,    57,
+      58,    59,    60,    61,    62,    63,    64,    65,    66,    67,
+      68,    69,    70,    71,    72,    73,    74,    75,    76
 };
 #endif
 
@@ -491,8 +492,7 @@ static const char *const yytname[] =
   "END", "START", "PRINT", "INPUT", "EQUALS_TO", "EQUALS_TO_VALUE",
   "STRING", "SEMICOLON", "COMMA", "INVALID", "$accept", "start_program",
   "variables", "definition", "main", "statements", "keyword", "input",
-  "readin", "add", "type", "print", "combination", "check_equals",
-  "finish", YY_NULLPTR
+  "readin", "add", "print", "combination", "check_equals", "finish", YY_NULLPTR
 };
 #endif
 
@@ -507,10 +507,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -32
+#define YYPACT_NINF -33
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-32)))
+  (!!((Yystate) == (-33)))
 
 #define YYTABLE_NINF -1
 
@@ -521,12 +521,13 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -1,   -10,    21,     7,   -32,    17,    18,     6,   -32,     7,
-     -32,     8,     9,    -4,   -32,   -32,   -32,   -13,    15,    10,
-      -5,    20,   -32,    -4,   -32,   -32,   -32,   -32,   -32,    24,
-       2,   -32,   -32,   -32,    22,   -32,    11,    13,    16,    14,
-      19,   -32,    23,    25,    26,    30,    -5,    -5,   -32,    20,
-     -32,   -32,   -32,   -32,    27,   -32,   -32,   -32,   -32
+      -1,   -10,    21,     7,   -33,    17,    18,     6,   -33,     7,
+     -33,     8,     9,    -4,   -33,   -33,   -33,   -13,    15,    10,
+      -5,    20,   -33,    -4,   -33,   -33,   -33,   -33,   -33,    24,
+       2,    22,    23,    25,   -33,    11,    14,    19,    16,    26,
+     -33,    27,    28,    29,    31,    33,    34,    -5,    -5,   -33,
+      20,   -33,   -33,   -33,   -33,    30,    32,    35,   -33,   -33,
+     -33,   -33,   -33,   -33
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -537,23 +538,24 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,     0,     1,     0,     0,     0,     2,     0,
        4,     0,     0,     0,     3,     5,     6,     0,     0,     0,
        0,     0,     7,     0,    12,    11,    10,    13,     9,     0,
-       0,    19,    20,    18,     0,    29,    22,    24,     0,    16,
-       0,     8,     0,     0,     0,     0,     0,     0,    21,     0,
-      14,    26,    27,    28,     0,    23,    25,    15,    17
+       0,     0,     0,     0,    28,    21,    23,     0,    16,     0,
+       8,     0,     0,     0,     0,     0,     0,     0,     0,    20,
+       0,    14,    25,    26,    27,     0,     0,     0,    22,    24,
+      15,    18,    19,    17
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -32,   -32,    29,   -32,   -32,    28,   -32,   -32,    -9,   -32,
-     -32,   -32,   -31,   -32,   -32
+     -33,   -33,    40,   -33,   -33,    36,   -33,   -33,    -9,   -33,
+     -33,   -32,   -33,   -33
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     8,     9,    10,    22,    23,    24,    40,    25,
-      34,    26,    38,    27,    28
+      -1,     2,     8,     9,    10,    22,    23,    24,    39,    25,
+      26,    37,    27,    28
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -561,22 +563,22 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      36,    17,    29,    30,    18,    43,    44,    19,     3,    20,
-      21,     1,    37,     5,     6,    55,    56,     7,    31,    32,
-      33,     4,    11,    12,    13,    39,    15,    16,    35,    42,
-      46,    45,    47,    49,    48,    54,     0,    50,    14,     0,
-      57,    51,     0,    52,    53,    58,     0,     0,     0,     0,
-       0,    41
+      35,    17,    29,    30,    18,    42,    43,    19,     3,    20,
+      21,     1,    36,     5,     6,    58,    59,     7,    31,    32,
+      33,     4,    11,    12,    13,    38,    15,    16,    34,    41,
+      47,    44,    45,    48,    46,    50,    55,    49,    56,    57,
+       0,    60,     0,     0,    51,    52,    53,    54,    61,    14,
+      62,     0,     0,    63,     0,     0,     0,     0,     0,    40
 };
 
 static const yytype_int8 yycheck[] =
 {
        5,     5,    15,    16,     8,     3,     4,    11,    18,    13,
-      14,    12,    17,     6,     7,    46,    47,    10,     3,     4,
+      14,    12,    17,     6,     7,    47,    48,    10,     3,     4,
        5,     0,     5,     5,    18,     5,    18,    18,    18,     5,
-      19,     9,    19,    19,    18,     5,    -1,    18,     9,    -1,
-      49,    18,    -1,    18,    18,    18,    -1,    -1,    -1,    -1,
-      -1,    23
+      19,     9,     9,    19,     9,    19,     5,    18,     5,     5,
+      -1,    50,    -1,    -1,    18,    18,    18,    18,    18,     9,
+      18,    -1,    -1,    18,    -1,    -1,    -1,    -1,    -1,    23
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -585,26 +587,27 @@ static const yytype_uint8 yystos[] =
 {
        0,    12,    22,    18,     0,     6,     7,    10,    23,    24,
       25,     5,     5,    18,    23,    18,    18,     5,     8,    11,
-      13,    14,    26,    27,    28,    30,    32,    34,    35,    15,
-      16,     3,     4,     5,    31,    18,     5,    17,    33,     5,
-      29,    26,     5,     3,     4,     9,    19,    19,    18,    19,
-      18,    18,    18,    18,     5,    33,    33,    29,    18
+      13,    14,    26,    27,    28,    30,    31,    33,    34,    15,
+      16,     3,     4,     5,    18,     5,    17,    32,     5,    29,
+      26,     5,     3,     4,     9,     9,     9,    19,    19,    18,
+      19,    18,    18,    18,    18,     5,     5,     5,    32,    32,
+      29,    18,    18,    18
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    21,    22,    23,    23,    24,    24,    25,    26,    26,
-      27,    27,    27,    27,    28,    29,    29,    30,    31,    31,
-      31,    32,    33,    33,    33,    33,    34,    34,    34,    35
+      27,    27,    27,    27,    28,    29,    29,    30,    30,    30,
+      31,    32,    32,    32,    32,    33,    33,    33,    34
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     3,     2,     1,     3,     3,     3,     2,     1,
-       1,     1,     1,     1,     3,     3,     1,     5,     1,     1,
-       1,     3,     1,     3,     1,     3,     4,     4,     4,     2
+       1,     1,     1,     1,     3,     3,     1,     5,     5,     5,
+       3,     1,     3,     1,     3,     4,     4,     4,     2
 };
 
 
@@ -1281,175 +1284,169 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 49 "project.y" /* yacc.c:1646  */
+#line 50 "project.y" /* yacc.c:1646  */
     {}
-#line 1287 "project.tab.c" /* yacc.c:1646  */
+#line 1290 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 50 "project.y" /* yacc.c:1646  */
+#line 51 "project.y" /* yacc.c:1646  */
     {}
-#line 1293 "project.tab.c" /* yacc.c:1646  */
+#line 1296 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 51 "project.y" /* yacc.c:1646  */
+#line 52 "project.y" /* yacc.c:1646  */
     {}
-#line 1299 "project.tab.c" /* yacc.c:1646  */
+#line 1302 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 52 "project.y" /* yacc.c:1646  */
+#line 53 "project.y" /* yacc.c:1646  */
     {defineVariable((yyvsp[-2].id), (yyvsp[-1].id));}
-#line 1305 "project.tab.c" /* yacc.c:1646  */
+#line 1308 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 53 "project.y" /* yacc.c:1646  */
+#line 54 "project.y" /* yacc.c:1646  */
     {defineVariable((yyvsp[-2].id), (yyvsp[-1].id));}
-#line 1311 "project.tab.c" /* yacc.c:1646  */
+#line 1314 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 54 "project.y" /* yacc.c:1646  */
+#line 55 "project.y" /* yacc.c:1646  */
     {}
-#line 1317 "project.tab.c" /* yacc.c:1646  */
+#line 1320 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 55 "project.y" /* yacc.c:1646  */
+#line 56 "project.y" /* yacc.c:1646  */
     {}
-#line 1323 "project.tab.c" /* yacc.c:1646  */
+#line 1326 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 56 "project.y" /* yacc.c:1646  */
+#line 57 "project.y" /* yacc.c:1646  */
     {}
-#line 1329 "project.tab.c" /* yacc.c:1646  */
+#line 1332 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 57 "project.y" /* yacc.c:1646  */
+#line 58 "project.y" /* yacc.c:1646  */
     {}
-#line 1335 "project.tab.c" /* yacc.c:1646  */
+#line 1338 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 58 "project.y" /* yacc.c:1646  */
+#line 59 "project.y" /* yacc.c:1646  */
     {}
-#line 1341 "project.tab.c" /* yacc.c:1646  */
+#line 1344 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 59 "project.y" /* yacc.c:1646  */
+#line 60 "project.y" /* yacc.c:1646  */
     {}
-#line 1347 "project.tab.c" /* yacc.c:1646  */
+#line 1350 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 60 "project.y" /* yacc.c:1646  */
+#line 61 "project.y" /* yacc.c:1646  */
     {}
-#line 1353 "project.tab.c" /* yacc.c:1646  */
+#line 1356 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 61 "project.y" /* yacc.c:1646  */
+#line 62 "project.y" /* yacc.c:1646  */
     {}
-#line 1359 "project.tab.c" /* yacc.c:1646  */
+#line 1362 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 62 "project.y" /* yacc.c:1646  */
+#line 63 "project.y" /* yacc.c:1646  */
     {isDefined((yyvsp[-2].id), true);}
-#line 1365 "project.tab.c" /* yacc.c:1646  */
+#line 1368 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 63 "project.y" /* yacc.c:1646  */
+#line 64 "project.y" /* yacc.c:1646  */
     {isDefined((yyvsp[0].id), true);}
-#line 1371 "project.tab.c" /* yacc.c:1646  */
+#line 1374 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 64 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[-1].id), true);}
-#line 1377 "project.tab.c" /* yacc.c:1646  */
+#line 65 "project.y" /* yacc.c:1646  */
+    {if(isDefined((yyvsp[-1].id), true) && isDefined((yyvsp[-3].id), true)) {checkEqualsIdentifier((yyvsp[-1].id), (yyvsp[-3].id));};}
+#line 1380 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 65 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[0].id), true);}
-#line 1383 "project.tab.c" /* yacc.c:1646  */
+#line 66 "project.y" /* yacc.c:1646  */
+    {if(isDefined((yyvsp[-1].id), true)) {checkEqualsInt((yyvsp[-1].id), (yyvsp[-3].ival));};}
+#line 1386 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 66 "project.y" /* yacc.c:1646  */
-    {}
-#line 1389 "project.tab.c" /* yacc.c:1646  */
+#line 67 "project.y" /* yacc.c:1646  */
+    {if(isDefined((yyvsp[-1].id), true)) {checkEqualsDouble((yyvsp[-1].id), (yyvsp[-3].id));};}
+#line 1392 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 67 "project.y" /* yacc.c:1646  */
+#line 68 "project.y" /* yacc.c:1646  */
     {}
-#line 1395 "project.tab.c" /* yacc.c:1646  */
+#line 1398 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 68 "project.y" /* yacc.c:1646  */
-    {}
-#line 1401 "project.tab.c" /* yacc.c:1646  */
+#line 69 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[0].id), true);}
+#line 1404 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 69 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[0].id), true);}
-#line 1407 "project.tab.c" /* yacc.c:1646  */
+#line 70 "project.y" /* yacc.c:1646  */
+    {isDefined((yyvsp[-2].id), true);}
+#line 1410 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 70 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[-2].id), true);}
-#line 1413 "project.tab.c" /* yacc.c:1646  */
+#line 71 "project.y" /* yacc.c:1646  */
+    {}
+#line 1416 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 71 "project.y" /* yacc.c:1646  */
+#line 72 "project.y" /* yacc.c:1646  */
     {}
-#line 1419 "project.tab.c" /* yacc.c:1646  */
+#line 1422 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 72 "project.y" /* yacc.c:1646  */
-    {}
-#line 1425 "project.tab.c" /* yacc.c:1646  */
+#line 73 "project.y" /* yacc.c:1646  */
+    {if(isDefined((yyvsp[-3].id), true) && isDefined((yyvsp[-1].id), true)) {checkEqualsIdentifier((yyvsp[-3].id), (yyvsp[-1].id));};}
+#line 1428 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 73 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[-3].id), true); isDefined((yyvsp[-1].id), true); checkEqualsIdentifier((yyvsp[-3].id), (yyvsp[-1].id));}
-#line 1431 "project.tab.c" /* yacc.c:1646  */
+#line 74 "project.y" /* yacc.c:1646  */
+    {if(isDefined((yyvsp[-3].id), true)) {checkEqualsInt((yyvsp[-3].id), (yyvsp[-1].ival));};}
+#line 1434 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 74 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[-3].id), true); checkEqualsInt((yyvsp[-3].id), (yyvsp[-1].ival));}
-#line 1437 "project.tab.c" /* yacc.c:1646  */
+#line 75 "project.y" /* yacc.c:1646  */
+    {if(isDefined((yyvsp[-3].id), true)) {checkEqualsDouble((yyvsp[-3].id), (yyvsp[-1].id));};}
+#line 1440 "project.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 75 "project.y" /* yacc.c:1646  */
-    {isDefined((yyvsp[-3].id), true); checkEqualsDouble((yyvsp[-3].id), (yyvsp[-1].id));}
-#line 1443 "project.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 29:
 #line 76 "project.y" /* yacc.c:1646  */
     {exit(0);}
-#line 1449 "project.tab.c" /* yacc.c:1646  */
+#line 1446 "project.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1453 "project.tab.c" /* yacc.c:1646  */
+#line 1450 "project.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1691,10 +1688,15 @@ int main() {
 }
 
 void yyerror(const char* s) {
-	fprintf(stderr, "Parse error: %s\n", s);
+	fprintf(stderr, "Parse error (Line: %d): %s\n", yylineno, s);
 	exit(1);
 }
 
+/*
+ * Checks to see if an identifier is declared
+ * Returns true if it is defined
+ * Returns false if it isnt defined
+ */
 bool isDefined(char *name, bool check) {
 	bool defined = false;
 	for(int i = 0; i < variableTotal; i++) {
@@ -1703,20 +1705,30 @@ bool isDefined(char *name, bool check) {
 		}
 	}
 	if(defined == false && check == true) {
-		printf("%s is not declared\n", name);
+		printf("Warning: %s is not declared (Line %d)\n", name, yylineno);
 	}
 	return defined;
 }
 
+/*
+ * Checks if a identifier is already declared
+ * If its not then we define it
+ */
 void defineVariable(char *size, char *name) {
 	if(isDefined(name, false) == true) {
-		printf("Already declared");
+		printf("Warning: %s is already declared (Line %d)\n", name, yylineno);
+		return;
 	}
 	strcpy(names[variableTotal], name);
 	getSize(size);
 	variableTotal = variableTotal + 1;
 }
 
+/*
+ * Checks if the identifier contains a '-' i.e. XX-XX
+ * If it does we define a double identifier
+ * If it does not we define an int
+ */
 void getSize(char *size) {
 	if(strchr(size, '-') != NULL) {
 		defineDouble(size);
@@ -1725,6 +1737,9 @@ void getSize(char *size) {
 	}
 }
 
+/*
+ * Defines an int identifier into the size table
+ */
 void defineInt(char *size) {
 	int length = 0;
 	while(size != NULL && *size != '\0') {
@@ -1735,6 +1750,9 @@ void defineInt(char *size) {
 	sizes[variableTotal][1] = 0;
 }
 
+/*
+ * Defines a double identifier into the size table
+ */
 void defineDouble(char *size) {
 	int integerLength = 0;
 	int decimalLength = 0;
@@ -1753,6 +1771,9 @@ void defineDouble(char *size) {
 	sizes[variableTotal][1] = decimalLength;
 }
 
+/*
+ * Checks if an identifiers size matches an int
+ */
 void checkEqualsInt(char *identifier, int literal) {
 	int inetegerSize1, doubleSize1, index1, literalSize;
 	inetegerSize1 = 0;
@@ -1765,10 +1786,15 @@ void checkEqualsInt(char *identifier, int literal) {
 	doubleSize1 = sizes[index1][1];
 	
 	if(inetegerSize1 != literalSize || doubleSize1 != 0) {
-		printf("%s is not the same size as %d\n", identifier, literal);
+		printf("Warning: %s is not the same size as %d (Line %d)\n", identifier, literal, yylineno);
+		printf("Warning: %s is size %d-%d\n", identifier, inetegerSize1, doubleSize1);
+		printf("Warning: %d is size %d-%d\n", literal, literalSize, 0);
 	}
 }
 
+/*
+ * Checks if an identifiers size matches another identifier
+ */
 void checkEqualsIdentifier(char *identifier1, char* identifier2) {
 	int inetegerSize1, inetegerSize2, doubleSize1, doubleSize2, index1, index2;
 	inetegerSize1 = 0;
@@ -1783,10 +1809,15 @@ void checkEqualsIdentifier(char *identifier1, char* identifier2) {
 	doubleSize2 = sizes[index2][1];
 	
 	if(inetegerSize1 != inetegerSize2 || doubleSize1 != doubleSize2) {
-		printf("%s is not the same size as %s\n", identifier1, identifier2);
+		printf("Warning: %s is not the same size as %s (Line %d)\n", identifier1, identifier2, yylineno);
+		printf("Warning: %s is size %d-%d\n", identifier1, inetegerSize1, doubleSize1);
+		printf("Warning: %s is size %d-%d\n", identifier2, inetegerSize2, doubleSize2);
 	}
 }
 
+/*
+ * Checks if an identifiers size matches a double
+ */
 void checkEqualsDouble(char *identifier, char *literal) {
 	int inetegerSize1, doubleSize1, index1, literalSize1, literalSize2;
 	inetegerSize1 = 0;
@@ -1799,10 +1830,15 @@ void checkEqualsDouble(char *identifier, char *literal) {
 	doubleSize1 = sizes[index1][1];
 
 	if(inetegerSize1 != literalSize1 || doubleSize1 != literalSize2) {
-		printf("%s is not the same size as %s\n", identifier, literal);
+		printf("Warning: %s is not the same size as %s (Line %d)\n", identifier, literal, yylineno);
+		printf("Warning: %s is size %d-%d\n", identifier, inetegerSize1, doubleSize1);
+		printf("Warning: %s is size %d-%d\n", literal, literalSize1, literalSize2);
 	}
 }
 
+/*
+ * Gets the index of an identifier in the name and size table
+ */
 int getIndex(char *identifier) {
 	int index1 = 0;
 	for(int i = 0; i < variableTotal; i++) {
@@ -1813,6 +1849,9 @@ int getIndex(char *identifier) {
 	return index1;
 }
 
+/*
+ * Gets the size of a literal float i.e. 12.14 is 2-2
+ */
 void getLiteralFloatSize(int *intSize, int *floatSize, char *literal) {
 	int length = (int)strlen(literal);
 	int index = 0;
